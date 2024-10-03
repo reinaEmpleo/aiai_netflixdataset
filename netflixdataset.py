@@ -1,25 +1,3 @@
-# import streamlit as st
-
-# # Title of the app
-# st.title("Testing one two three")
-
-# # Header and Subheader
-# st.header("Welcome to Streamlit")
-# st.subheader("This is a simple web app built with Streamlit!")
-
-# # Text input
-# user_input = st.text_input("Enter your name")
-
-# # Display the user's input
-# st.write("Hello, ", user_input)
-
-# # Simple button
-# if st.button("Click Me"):
-#     st.write("You clicked the button!")
-
-# # Checkbox
-# if st.checkbox("Show more"):
-#     st.write("Here is more information.")
 
 import streamlit as st
 import pandas as pd
@@ -38,7 +16,7 @@ OverviewTab, DashboadTab, AnalysisTab = st.tabs(["Dataset Overview", "Dashboard"
 with OverviewTab:  
     # Introduction 
     st.write("### Introduction")
-    st.write("Text")
+    st.write("Netflix is one of the most widely used media and video streaming platforms. They have over 8000 movies and television shows available on their platform, and as of mid-2021, they had over 200 million subscribers worldwide. This tabular dataset contains listings of all the movies and TV shows accessible on Netflix, together with information such as cast, directors, ratings, release year, duration, and so on.")
     # Display the dataframe
     st.write("### Netflix Dataset Overview")
     st.dataframe(df)
