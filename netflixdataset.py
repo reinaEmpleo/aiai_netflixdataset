@@ -16,6 +16,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 # Title of the app
 st.title("Netflix Data Science Project")
 
