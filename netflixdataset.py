@@ -2,6 +2,20 @@
 import streamlit as st
 import pandas as pd
 
+st.set_page_config(
+    page_title="Netflix Dataset Report",
+    page_icon=":tv:",
+    layout="centered",
+)
+
+st.markdown(
+    """
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 # Title of the app
 st.title("Netflix Data Science Project")
 
