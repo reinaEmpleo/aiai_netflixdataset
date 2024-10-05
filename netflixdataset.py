@@ -1,27 +1,67 @@
-
 import streamlit as st
 import pandas as pd
 
+# Set the page configuration
 st.set_page_config(
     page_title="Netflix Dataset Report",
     page_icon=":tv:",
     layout="centered",
 )
 
+
+# Load the image using PIL (Make sure the image is in your project folder)
+image = Image.open("5af81474848088bcedcb848fe725dfb9.jpg")
+
+# Display the image in the background with custom CSS for blur
 st.markdown(
-    """
+    f"""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+    .background {{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('data:image/jpeg;base64,{st.image(image).image_data}');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        filter: blur(5px);
+        z-index: -1;
+    }}
+
+    .main-content {{
+        font-family: 'Bebas Neue', sans-serif;
+        color: white;
+        position: relative;
+        z-index: 1;
+    }}
+
+    h1 {{
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 60px;
+        color: white;
+    }}
+
+    .intro-text {{
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 24px;
+        line-height: 1.5;
+        color: white;
+    }}
     </style>
+
+    <div class="background"></div>
     """,
     unsafe_allow_html=True
 )
 
-# Title of the app
+# Title of the app with 'h1' tag style
 st.title("Netflix Data Science Project")
 
-# Load dataset directly from the file (no user upload)
-# Assuming the dataset (e.g., 'netflix_titles.csv') is in your project folder
+# Load dataset directly from the file
 df = pd.read_csv('netflix_titles.csv')
 
 # Create tabs
@@ -29,9 +69,12 @@ OverviewTab, DashboadTab, AnalysisTab = st.tabs(["Dataset Overview", "Dashboard"
 
 # Data Overview tab
 with OverviewTab:  
-    # Introduction 
-    st.write("### Introduction")
-    st.write("Netflix is one of the most widely used media and video streaming platforms. They have over 8000 movies and television shows available on their platform, and as of mid-2021, they had over 200 million subscribers worldwide. This tabular dataset contains listings of all the movies and TV shows accessible on Netflix, together with information such as cast, directors, ratings, release year, duration, and so on.")
+    # Introduction using Bebas Neue font
+    st.markdown(
+        '<p class="intro-text">Netflix is one of the most widely used media and video streaming platforms. They have over 8000 movies and television shows available on their platform, and as of mid-2021, they had over 200 million subscribers worldwide. This tabular dataset contains listings of all the movies and TV shows accessible on Netflix, together with information such as cast, directors, ratings, release year, duration, and so on.</p>', 
+        unsafe_allow_html=True
+    )
+    
     # Display the dataframe
     st.write("### Netflix Dataset Overview")
     st.dataframe(df)
