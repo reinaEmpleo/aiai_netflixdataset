@@ -1,5 +1,7 @@
 import streamlit as st
 import pandas as pd
+from PIL import Image
+
 
 # Set the page configuration
 st.set_page_config(
@@ -10,46 +12,64 @@ st.set_page_config(
 
 
 # Load the image using PIL (Make sure the image is in your project folder)
-image = Image.open("5af81474848088bcedcb848fe725dfb9.jpg")
+image = Image.open("pic.jpg")
+
 
 # Display the image in the background with custom CSS for blur
 st.markdown(
     f"""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
 
+    /* Background styling */
     .background {{
         position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
-        height: 100%;
+        width: 50%;
+        height: 50%;
         background-image: url('data:image/jpeg;base64,{st.image(image).image_data}');
         background-size: cover;
         background-repeat: no-repeat;
         background-attachment: fixed;
-        filter: blur(5px);
-        z-index: -1;
+        z-index: -2;
     }}
 
+    /* Main content */
     .main-content {{
-        font-family: 'Bebas Neue', sans-serif;
+        font-family: 'Lato', sans-serif;
         color: white;
         position: relative;
         z-index: 1;
     }}
 
+    /* h1 styling (for title) */
     h1 {{
-        font-family: 'Bebas Neue', sans-serif;
+        font-family: 'Lato', sans-serif;
         font-size: 60px;
+        font-weight: 900;  
+        letter-spacing: 2px;  
         color: white;
     }}
 
+    /* h3 styling (for subheaders) */
+    h2, h3 {{
+        font-family: 'Lato', sans-serif;
+        font-weight: 700;
+        letter-spacing: 2px;  /* Letter spacing */
+        color: white;
+        margin-bottom: 20px;
+    }}
+
     .intro-text {{
-        font-family: 'Bebas Neue', sans-serif;
-        font-size: 24px;
+        font-family: 'Lato', sans-serif;
+        font-size: 18px;
+        font-weight: 400;  /* Lighter weight */
+        letter-spacing: 1.4px;  /* Letter spacing */
+        font-style: italic;
         line-height: 1.5;
         color: white;
+        margin-top:5px;
     }}
     </style>
 
@@ -69,14 +89,27 @@ OverviewTab, DashboadTab, AnalysisTab = st.tabs(["Dataset Overview", "Dashboard"
 
 # Data Overview tab
 with OverviewTab:  
-    # Introduction using Bebas Neue font
     st.markdown(
-        '<p class="intro-text">Netflix is one of the most widely used media and video streaming platforms. They have over 8000 movies and television shows available on their platform, and as of mid-2021, they had over 200 million subscribers worldwide. This tabular dataset contains listings of all the movies and TV shows accessible on Netflix, together with information such as cast, directors, ratings, release year, duration, and so on.</p>', 
+        '<p class="intro-text">Netflix is one of the most widely used media and video streaming platforms. They have over 8000 movies and television shows available on their platform, and as of mid-2021, they had over 200 million subscribers worldwide. This tabular dataset, found in Kaggle, contains listings of all the movies and TV shows accessible on Netflix, together with information such as cast, directors, ratings, release year, duration, and so on.</p>', 
         unsafe_allow_html=True
     )
-    
+    st.markdown(
+    '''
+    <p class="intro-text">
+    The key goals of our data analysis for this Netflix dataset are to obtain more information into the platform's content distribution and patterns. 
+    We wanted to know how many Netflix titles are available in different countries, as well as how much content is available in each. 
+    In addition, we wanted to know if Netflix had focused more on developing TV episodes or films in recent years. 
+    We investigated how the quantity of releases has changed over time by evaluating the data. 
+    Finally, we investigated genre trends, determining what genres are prevalent or noticeable in certain countries, 
+    as well as which genres are frequently generated in specific regions.
+    </p>
+    ''', 
+    unsafe_allow_html=True
+    )
+
+    st.divider()
     # Display the dataframe
-    st.write("### Netflix Dataset Overview")
+    st.write("## Netflix Dataset Overview", ":bar_chart:")
     st.dataframe(df)
 
     # Show basic statistics
@@ -109,3 +142,4 @@ with OverviewTab:
     st.write("### Filtered Data: Movies Released After 2015")
     filtered_df = df[df['release_year'] > 2015]
     st.dataframe(filtered_df)
+
