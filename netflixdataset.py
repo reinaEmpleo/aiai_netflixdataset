@@ -115,9 +115,9 @@ OverviewTab, DashboadTab, AnalysisTab = st.tabs(["Dataset Overview", "Data Visua
 # Data Overview tab
 with OverviewTab:  
     
-    st.write("### Introduction")
+    st.write("### Introduction", ":clipboard:")
     st.markdown(
-        '<p class="text-section">Netflix is one of the most widely used media and video streaming platforms. They have over 8000 movies and television shows available on their platform, and as of mid-2021, they had over 200 million subscribers worldwide. This tabular dataset, contains listings of all the movies and TV shows accessible on Netflix, together with information such as cast, directors, ratings, release year, duration, and so on.</p>', 
+        '<p class="text-section">Netflix is one of the most widely used media and video streaming platforms. They have over 15,000 movies and television shows available on their platform, and as of mid-2021, they had over 200+ million subscribers worldwide. This tabular dataset, with over 8000+ rows and 12 columns, contains listings of the movies and TV shows accessible on Netflix, together with information such as cast, directors, ratings, release year, duration, and so on.</p>', 
         unsafe_allow_html=True
     )
     st.markdown(
@@ -277,7 +277,7 @@ with OverviewTab:
         fig2 = px.pie(rating_count, values='count', names='rating', title="Distribution of Netflix Ratings")
         st.plotly_chart(fig2)
 
-        st.markdown("<i><small>📊 **Figure 4**: This pie chart provides an overview of the **Distribution** by the number of **Ratings of both TV-show and Movie** between **2005 and 2021**.</small></i>", unsafe_allow_html=True)
+        st.markdown("<i><small>📊 **Figure 4**: This pie chart provides an overview of the **Distribution** of **Ratings** of both **TV-show and Movie** between **2005 and 2021**.</small></i>", unsafe_allow_html=True)
         st.markdown("<small>The pie chart on Netflix ratings distribution reveals that TV-MA (Mature Audiences) dominates with 39.4% of all rated content, indicating that a significant portion of Netflix's content is tailored to adult viewers. TV-14, targeting teenagers, follows with 24.3%, reflecting a large amount of content for younger audiences as well. TV-PG, at 9.7%, and R-rated content, at 8.62%, further contribute to the platform's adult-focused offerings. The presence of TV-Y (3.09%) and TV-Y7 (3.06%) shows Netflix's smaller but notable commitment to children’s programming. The lower percentages for PG (2.9%) and TV-G (2.48%) suggest that family-oriented content forms a smaller portion of the overall library. This data highlights Netflix’s emphasis on mature and teen audiences while maintaining a diverse range of content for different age groups.</small>", unsafe_allow_html=True)
 
         st.divider()
@@ -349,7 +349,7 @@ with OverviewTab:
         st.markdown("<small>The **US** leads with a significant preference for **Kid's TV** (93), showing a strong demand for child-friendly content, followed by **Reality TV** (72), and both **Docuseries** and **TV Comedies** (60 each). **South Korea** emphasizes a mix of **International, Korean, and Romantic TV Shows** (63), reflecting its global influence and local storytelling. **Japan** stands out with a strong affinity for **Anime** and **International TV Shows** (71), indicating the popularity of animated content and cross-border entertainment.</small>", unsafe_allow_html=True)
 
     with AnalysisTab:
-        st.write("### Analysis","(:clipboard:")
+        st.write("### Analysis",":clipboard:")
         st.markdown(
     '''
         <p class="text-section">The analysis of the Netflix dataset reveals significant trends in content production, highlighting a steady increase in movie and TV show releases after 2000, peaking around 2018-2019 before a noticeable decline in 2020, likely influenced by external factors such as the pandemic.</p>
