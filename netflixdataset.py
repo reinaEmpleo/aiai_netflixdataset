@@ -224,6 +224,8 @@ with OverviewTab:
         st.markdown("<small><b>TV Shows</b>: While starting with lower numbers, TV show releases gradually increased, peaking in 2020 with 391 titles. The rise was more consistent compared to movies, but there was a sharp decline post-2020.</small>", unsafe_allow_html=True)
         st.markdown("<small><b>General Trend:</b> Movies dominated in volume throughout the period, but TV Shows saw steady growth, particularly from 2005 onward. The decline in both categories after 2020 may reflect broader industry shifts or impacts, potentially due to the global pandemic.</small>", unsafe_allow_html=True)
         
+        st.divider()
+
          # Plot : Movies released by year
         movies = df[df['type'] == 'Movie']
         tv_shows = df[df['type'] == 'TV Show']
@@ -266,6 +268,8 @@ with OverviewTab:
         st.markdown("<small><b>United Kingdom:</b> These countries follow, with 238 TV shows, making it second on the list.</small>", unsafe_allow_html=True)
         st.markdown("<small><b>Japan and South Korea:</b> Following the U.K., Japan produced 163 TV shows, while South Korea contributed 164 TV shows, showcasing a strong presence in the Asian entertainment industry.</small>", unsafe_allow_html=True)
         st.markdown("<small><b>Canada, India, France, Australia, Taiwan, and Spain:</b> These countries also made notable contributions, with varying levels of production but still placing within the top 10.</small>", unsafe_allow_html=True)
+        
+        st.divider()
 
         # Plot : Distribution of ratings
         rating_count = df['rating'].value_counts().reset_index()
@@ -273,10 +277,11 @@ with OverviewTab:
         fig2 = px.pie(rating_count, values='count', names='rating', title="Distribution of Netflix Ratings")
         st.plotly_chart(fig2)
 
-        st.markdown("<i><small>📊 **Figure 3**: This treemap provides an overview of the **Top 10 Countries** by the number of **TV Shows Produced on Netflix** between **2005 and 2021**. The United States leads significantly, followed by Japan and South Korea, underscoring the dominance of North America and Asia in Netflix's TV show production.</small></i>", unsafe_allow_html=True)
+        st.markdown("<i><small>📊 **Figure 4**: This pie chart provides an overview of the **Distribution** by the number of **Ratings of both TV-show and Movie** between **2005 and 2021**.</small></i>", unsafe_allow_html=True)
         st.markdown("<small>The pie chart on Netflix ratings distribution reveals that TV-MA (Mature Audiences) dominates with 39.4% of all rated content, indicating that a significant portion of Netflix's content is tailored to adult viewers. TV-14, targeting teenagers, follows with 24.3%, reflecting a large amount of content for younger audiences as well. TV-PG, at 9.7%, and R-rated content, at 8.62%, further contribute to the platform's adult-focused offerings. The presence of TV-Y (3.09%) and TV-Y7 (3.06%) shows Netflix's smaller but notable commitment to children’s programming. The lower percentages for PG (2.9%) and TV-G (2.48%) suggest that family-oriented content forms a smaller portion of the overall library. This data highlights Netflix’s emphasis on mature and teen audiences while maintaining a diverse range of content for different age groups.</small>", unsafe_allow_html=True)
 
-     
+        st.divider()
+
         # Plot: Distribution of Top Genres : Movies
         country_genre_counts = movies.groupby(['country', 'listed_in']).size().unstack(fill_value=0)
         top_countries = country_genre_counts.sum(axis=1).sort_values(ascending=False).head(10).index
@@ -340,11 +345,11 @@ with OverviewTab:
 
             # Display the plot in Streamlit
         st.plotly_chart(fig7)
-        st.markdown("<i><small>📊 **Figure**: This bar chart presents the **Top Genres** in selected countries for Netflix shows.</small></i>", unsafe_allow_html=True)
+        st.markdown("<i><small>📊 **Figure**: This stacked bar chart presents the **Top Genres** in selected countries for Netflix shows.</small></i>", unsafe_allow_html=True)
         st.markdown("<small>The **US** leads with a significant preference for **Kid's TV** (93), showing a strong demand for child-friendly content, followed by **Reality TV** (72), and both **Docuseries** and **TV Comedies** (60 each). **South Korea** emphasizes a mix of **International, Korean, and Romantic TV Shows** (63), reflecting its global influence and local storytelling. **Japan** stands out with a strong affinity for **Anime** and **International TV Shows** (71), indicating the popularity of animated content and cross-border entertainment.</small>", unsafe_allow_html=True)
 
     with AnalysisTab:
-        st.write("### Analysis")
+        st.write("### Analysis","(:clipboard:")
         st.markdown(
     '''
         <p class="text-section">The analysis of the Netflix dataset reveals significant trends in content production, highlighting a steady increase in movie and TV show releases after 2000, peaking around 2018-2019 before a noticeable decline in 2020, likely influenced by external factors such as the pandemic.</p>
