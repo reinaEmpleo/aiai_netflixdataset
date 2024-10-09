@@ -34,13 +34,14 @@ st.markdown(
         z-index: -2;
     }}
 
-    .main-content {{
+     .main-content {{
         font-family: 'Lato', sans-serif;
         color: white;
         position: relative;
         z-index: 1;
     }}
 
+    /* Title styling */
     h1 {{
         font-family: 'Lato', sans-serif;
         font-size: 60px;
@@ -49,23 +50,43 @@ st.markdown(
         color: white;
     }}
 
+    /* Subheader styling */
     h2, h3 {{
         font-family: 'Lato', sans-serif;
         font-weight: 700;
         letter-spacing: 2px;
         color: white;
-        margin-bottom: 20px;
+        margin-bottom: 5px;
     }}
 
-    .intro-text {{
+    .special-text{{
+        font-family: 'Lato', sans-serif;
+        font-weight: 900;
+        font-size:20px;
+        color: white;
+    }}
+
+    /* Text style for introduction and analysis */
+    .text-section {{
         font-family: 'Lato', sans-serif;
         font-size: 18px;
         font-weight: 400;
-        letter-spacing: 1.4px;
-        font-style: italic;
+        letter-spacing: 1.3px;
         line-height: 1.5;
         color: white;
-        margin-top:5px;
+        margin: 5px 0;
+        font-style: italic;
+        }}
+
+    .text-another{{
+     font-family: 'Lato', sans-serif;
+        font-size: 18px;
+        font-weight: 400;
+        letter-spacing: 1.3px;
+        line-height: 1.5;
+        color: #E50914;
+        margin: 5px 0;
+        font-style: italic;
     }}
     </style>
 
@@ -93,29 +114,70 @@ OverviewTab, DashboadTab, AnalysisTab = st.tabs(["Dataset Overview", "Data Visua
 
 # Data Overview tab
 with OverviewTab:  
+    
+    st.write("### Introduction")
     st.markdown(
-        '<p class="intro-text">Netflix is one of the most widely used media and video streaming platforms. They have over 8000 movies and television shows available on their platform, and as of mid-2021, they had over 200 million subscribers worldwide. This tabular dataset, found in Kaggle, contains listings of all the movies and TV shows accessible on Netflix, together with information such as cast, directors, ratings, release year, duration, and so on.</p>', 
+        '<p class="text-section">Netflix is one of the most widely used media and video streaming platforms. They have over 8000 movies and television shows available on their platform, and as of mid-2021, they had over 200 million subscribers worldwide. This tabular dataset, contains listings of all the movies and TV shows accessible on Netflix, together with information such as cast, directors, ratings, release year, duration, and so on.</p>', 
         unsafe_allow_html=True
     )
+    st.markdown(
+    '''
+    <p class="text-section">
+    The primary objectives of our analysis of the Netflix dataset are to gain deeper insights into the platform's content distribution and patterns. We aim to identify the number of Netflix titles available across various countries and the extent of content available in each. Additionally, we are interested in determining whether Netflix has focused more on producing TV shows or movies in recent years.
+    </p>
+    
+    <p class="text-section">
+    By analyzing the data, we examine how the number of releases has evolved over time. We also explore genre trends, identifying which genres are popular or distinct in specific countries and which genres are commonly produced in different regions. Furthermore, we seek to uncover which countries have the highest number of TV shows and movies, as well as to analyze the number of ratings in the dataset.
+    </p>
+    ''', 
+    unsafe_allow_html=True
+)
+
+
     st.divider()
+#Clean the dataset
+    df_cleaned = df.dropna()
+
+    st.markdown('<p class = "special-text">Source:<p>', unsafe_allow_html=True)
+    st.markdown('<p class = "text-another"> This dataset is available through Kaggle.<p>', unsafe_allow_html=True)
+    st.markdown('<p class = "special-text">Types of Data <p>' , unsafe_allow_html=True)
+    st.markdown('<p class = "text-another">Categorical<p>', unsafe_allow_html=True)
+    st.divider()
+
+
     st.write("## Netflix Dataset Overview", ":bar_chart:")
+
+    # Before Data Cleaning
+    st.write('### Before Data Cleaning')
+    st.write("#### Dataset")
     st.dataframe(df)
 
     st.write("### Basic Statistics")
     st.write(df.describe())
 
-    st.write(f"**Number of rows:** {df.shape[0]}")
-    st.write(f"**Number of columns:** {df.shape[1]}")
+    st.write(f"*Number of rows:* {df.shape[0]}")
+    st.write(f"*Number of columns:* {df.shape[1]}")
+    st.divider()
+    # After Data Cleaning
+    st.write('### After Data Cleaning')
+    
+    st.dataframe(df_cleaned)
+
+    st.divider()
+
+    st.write("### Basic Statistics")
+    st.write(df_cleaned.describe())
+
+    st.write(f"*Number of rows:* {df_cleaned.shape[0]}")
+    st.write(f"*Number of columns:* {df_cleaned.shape[1]}")
+
+    st.divider()
 
     st.write("### First 5 Rows of the Dataset")
-    st.write(df.head())
+    st.write(df_cleaned.head())
 
-    st.write("### Count of Titles by Type (Movies/TV Shows)")
-    title_type_count = df['type'].value_counts()
-    st.bar_chart(title_type_count)
-    
     with DashboadTab:
-        st.markdown("<h3><span style='color:red'>Netflix</span> Data Visualization of 2015 - 2021</h3>", unsafe_allow_html=True)
+        st.markdown("<h3><span style='color:#E50914'>Netflix</span> Data Visualization of 2015 - 2021</h3>", unsafe_allow_html=True)
         type_count = df.groupby(['release_year', 'type']).size().reset_index(name='count')
 
         # Separate the data for Movies and TV Shows
@@ -259,7 +321,7 @@ with OverviewTab:
         )
 
 #         # Display the plot in Streamlit
-#         st.plotly_chart(fig6)
+        st.plotly_chart(fig6)
 
 #     with col2:
 #         # Descriptions and Data Analysis
@@ -267,23 +329,15 @@ with OverviewTab:
 #         """)
 
 # Analysis Tab
-with AnalysisTab:
-    st.write("### Analysis")
-    st.write("""
-    The analysis of the Netflix dataset reveals significant trends in content production, 
-    highlighting a steady increase in movie and TV show releases after 2000, peaking around 2018-2019 
-    before a noticeable decline in 2020, likely influenced by external factors such as the pandemic. 
-
-    The data shows that the United States and India are the dominant contributors to Netflix's content library, 
-    with a substantial majority of productions originating from these countries, particularly in genres like 
-    crime and documentaries. 
-
-    Visualizations such as line plots, bar charts, and heatmaps effectively illustrate this growth and genre diversity, 
-    underscoring Netflix's strategic focus on expanding its offerings to engage a global audience. 
-
-    As the platform continues to navigate the competitive streaming landscape, understanding these trends will be 
-    crucial for future content development and audience targeting.
-    """)
-
-
-
+    with AnalysisTab:
+        st.write("### Analysis")
+        st.markdown(
+    '''
+        <p class="text-section">The analysis of the Netflix dataset reveals significant trends in content production, highlighting a steady increase in movie and TV show releases after 2000, peaking around 2018-2019 before a noticeable decline in 2020, likely influenced by external factors such as the pandemic.</p>
+        
+        <p class="text-section">The data shows that the United States and India are the dominant contributors to Netflix's content library, with a substantial majority of productions originating from these countries, particularly in genres like crime and documentaries.</p>
+        
+        <p class="text-section">Visualizations such as line plots, bar charts, and heatmaps effectively illustrate this growth and genre diversity, underscoring Netflix's strategic focus on expanding its offerings to engage a global audience. As the platform continues to navigate the competitive streaming landscape, understanding these trends will be crucial for future content development and audience targeting.</p>
+    ''', 
+    unsafe_allow_html=True
+)
