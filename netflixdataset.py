@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 from PIL import Image
 import plotly.express as px  # Import Plotly for interactive graphs
+import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 
 # Set the page configuration
 st.set_page_config(
@@ -78,8 +80,16 @@ st.title("Netflix Data Science Project")
 # Load dataset directly from the file
 df = pd.read_csv('netflix_titles.csv')
 
+# Data Cleaning
+# 1. Remove Null Values
+df.dropna(subset=['title', 'country', 'release_year', 'rating', 'duration', 'type', 'listed_in'], inplace=True)
+
+# 2. Keep only the first country (if multiple are listed)
+df['country'] = df['country'].apply(lambda x: x.split(',')[0].strip() if ',' in x else x)
+df = df[df['release_year'] >= 2005]
+
 # Create tabs
-OverviewTab, DashboadTab, AnalysisTab = st.tabs(["Dataset Overview", "Dashboard", "Analysis"])
+OverviewTab, DashboadTab, AnalysisTab = st.tabs(["Dataset Overview", "Data Visualization", "Analysis"])
 
 # Data Overview tab
 with OverviewTab:  
@@ -103,210 +113,150 @@ with OverviewTab:
     st.write("### Count of Titles by Type (Movies/TV Shows)")
     title_type_count = df['type'].value_counts()
     st.bar_chart(title_type_count)
+    
+    with DashboadTab:
+        st.markdown("<h3><span style='color:red'>Netflix</span> Data Visualization of 2015 - 2021</h3>", unsafe_allow_html=True)
+        type_count = df.groupby(['release_year', 'type']).size().reset_index(name='count')
 
-    st.write("### Distribution of Titles by Release Year")
-    release_years = df['release_year'].value_counts().sort_index()
-    st.line_chart(release_years)
+        # Separate the data for Movies and TV Shows
+        movies_data = type_count[type_count['type'] == 'Movie']
+        tv_shows_data = type_count[type_count['type'] == 'TV Show']
 
-    st.write("### Filtered Data: Movies Released After 2015")
-    filtered_df = df[df['release_year'] > 2015]
-    st.dataframe(filtered_df)
+        # Create the area chart
+        fig = go.Figure()
 
-# Dashboard Tab
-with DashboadTab:
-    st.header("Netflix Dashboard")
+        # Add Movies data
+        fig.add_trace(go.Scatter(
+            x=movies_data['release_year'],
+            y=movies_data['count'],
+            mode='lines',
+            name='Movies',
+            fill='tozeroy',  # Fill the area beneath the line
+            line=dict(color='blue')
+        ))
 
-    # Distribution of content by country (top 10 countries)
-    st.write("### Distribution of Content by Country")
-    country_count = df['country'].value_counts().head(10)
-    st.bar_chart(country_count)
+        # Add TV Shows data
+        fig.add_trace(go.Scatter(
+            x=tv_shows_data['release_year'],
+            y=tv_shows_data['count'],
+            mode='lines',
+            name='TV Shows',
+            fill='tozeroy',  # Fill the area beneath the line
+            line=dict(color='red')
+        ))
 
-    # Plotly bar chart for content distribution by country
-    st.write("### Top 10 Countries by Content (Interactive)")
-    fig_country = px.bar(country_count, x=country_count.index, y=country_count.values, 
-                         labels={'x': 'Country', 'y': 'Count'}, title="Top 10 Countries by Content")
-    st.plotly_chart(fig_country)
+        # Update layout for the chart
+        fig.update_layout(
+            title="Number of Movies and TV Shows by Release Year (2015 and 2021)",
+            xaxis_title='Release Year',
+            yaxis_title='Number of Titles',
+            template='plotly',
+            legend_title="Show Type"
+        )
 
-    # Filter titles by country
-    st.write("### Filter Titles by Country")
-    selected_country = st.selectbox("Select a country", df['country'].dropna().unique())
-    filtered_by_country = df[df['country'] == selected_country]
-    st.write(filtered_by_country[['title', 'type', 'release_year', 'listed_in']])
+        # Display the plot in Streamlit
+        st.plotly_chart(fig)
 
-    # Content releases over time (area chart)
-    st.write("### Content Releases Over Time")
-    releases_per_year = df['release_year'].value_counts().sort_index()
-    st.area_chart(releases_per_year)
-
-    # Pie chart: Movies vs TV Shows
-    st.write("### Proportion of Movies vs TV Shows")
-    title_type_count = df['type'].value_counts()
-    st.pyplot(title_type_count.plot.pie(autopct='%1.1f%%', figsize=(5, 5)).figure)
-
-
-
-
-
-# Uncomment this kung kinsa mu layout mao ni ang partial graphs hehe thx
-# import streamlit as st
-# import pandas as pd
-# import plotly.express as px
-# import matplotlib.pyplot as plt
-# import plotly.graph_objects as go
-
-# # Title of the app
-# st.title("Netflix Data Science Project")
-
-# # Load dataset directly from the file
-# df = pd.read_csv('netflix_titles.csv')
-
-# # Data Cleaning
-# # 1. Remove Null Values
-# df.dropna(subset=['title', 'country', 'release_year', 'rating', 'duration'], inplace=True)
-
-# # 2. Keep only the first country (if multiple are listed)
-# df['country'] = df['country'].apply(lambda x: x.split(',')[0].strip() if ',' in x else x)
-
-# # # 3. Remove Outliers (e.g., based on 'duration' for movies and shows)
-# # df['duration_num'] = df['duration'].apply(lambda x: int(x.split()[0]) if 'min' in x else None)
-# # df = df[df['duration_num'].between(1, 300)]
-
-# # Create tabs
-# OverviewTab, DashboardTab, AnalysisTab = st.tabs(["Dataset Overview", "Dashboard", "Analysis"])
-
-# # Data Overview tab
-# with OverviewTab:
-#     st.write("### Introduction")
-#     st.write("This project explores Netflix data, focusing on visualizing patterns in titles, countries, and ratings.")
-
-#     # Display the cleaned dataframe
-#     st.write("### Cleaned Netflix Dataset Overview")
-#     st.dataframe(df)
-
-#     # Show basic statistics
-#     st.write("### Basic Statistics")
-#     st.write(df.describe())
-
-#     # Show number of rows and columns
-#     st.write(f"**Number of rows:** {df.shape[0]}")
-#     st.write(f"**Number of columns:** {df.shape[1]}")
-
-#     # Show first 5 rows of the dataset
-#     st.write("### First 5 Rows of the Cleaned Dataset")
-#     st.write(df.head())
-
-#     # Filter: Example - Show all movies released after 2015
-#     st.write("### Filtered Data: Movies Released After 2015")
-#     filtered_df = df[df['release_year'] > 2015]
-#     st.dataframe(filtered_df)
-
-# # Dashboard tab
-# with DashboardTab:
-#     st.write("### Dashboard")
-
-#     # Create two columns for layout
-#     col1, col2 = st.columns([1, 2])  # Column 1 (2x width) for graphs, Column 2 (1x width) for description
-
-#     with col1:
-#         # Plot : Count of shows/movies by country
-#         country_count = df['country'].value_counts().reset_index()
-#         country_count.columns = ['country', 'count']
-#         fig1 = px.bar(country_count.head(10), x='country', y='count', title="Top 10 Countries by Number of Netflix Titles")
-#         st.plotly_chart(fig1)
-
-#         # Plot : Distribution of ratings
-#         rating_count = df['rating'].value_counts().reset_index()
-#         rating_count.columns = ['rating', 'count']
-#         fig2 = px.pie(rating_count, values='count', names='rating', title="Distribution of Netflix Ratings")
-#         st.plotly_chart(fig2)
-
-#         # Plot : Movies released by year
-#         movies = df[df['type'] == 'Movie']
-#         tv_shows = df[df['type'] == 'TV Show']
-
-#         movies_release_year_counts = movies['release_year'].value_counts().sort_index()
-#         tv_shows_release_year_counts = tv_shows['release_year'].value_counts().sort_index()
-
-#         # Create a Plotly figure
-#         fig4 = go.Figure()
-
-#         # Line chart for Movies
-#         fig4.add_trace(go.Scatter(
-#             x=movies_release_year_counts.index,
-#             y=movies_release_year_counts.values,
-#             mode='lines+markers',
-#             name='Movies',
-#             line=dict(color='blue')
-#         ))
-
-#         # Line chart for TV Shows
-#         fig4.add_trace(go.Scatter(
-#             x=tv_shows_release_year_counts.index,
-#             y=tv_shows_release_year_counts.values,
-#             mode='lines+markers',
-#             name='TV Shows',
-#             line=dict(color='red')
-#         ))
-
-#         # Update layout
-#         fig4.update_layout(
-#             title='Line Plot of Release Year: Movies',
-#             xaxis_title='Release Year',
-#             yaxis_title='Frequency',
-#             legend_title='Type',
-#             template='plotly'
-#         )
-
-#         # Display the plot in Streamlit
-#         st.plotly_chart(fig4)  # Use st.plotly_chart to render the Plotly figure
+        st.markdown("<i><small>📈 Figure 1: This chart illustrates the trends in Netflix releases for Movies and TV Shows from 2015 to 2021.</small></i>", unsafe_allow_html=True)
+        st.markdown("<small><b>Movies:</b> The number of movie releases surged significantly between 2016 and 2017, with the highest count in 2017 at 729 titles. After 2017, the number of movie releases decreased steadily, with a sharp drop after 2019.</small>", unsafe_allow_html=True)
+        st.markdown("<small><b>TV Shows</b>: While starting with lower numbers, TV show releases gradually increased, peaking in 2020 with 391 titles. The rise was more consistent compared to movies, but there was a sharp decline post-2020.</small>", unsafe_allow_html=True)
+        st.markdown("<small><b>General Trend:</b> Movies dominated in volume throughout the period, but TV Shows saw steady growth, particularly from 2015 onward. The decline in both categories after 2020 may reflect broader industry shifts or impacts, potentially due to the global pandemic.</small>", unsafe_allow_html=True)
         
-#         # PLot Sample
-#         top_10_countries = movies['country'].value_counts().nlargest(10).reset_index()
-#         top_10_countries.columns = ['country', 'count']  # Rename columns to 'country' and 'count'
+         # Plot : Movies released by year
+        movies = df[df['type'] == 'Movie']
+        tv_shows = df[df['type'] == 'TV Show']
 
-#         # Create the treemap
-#         fig_treemap = px.treemap(top_10_countries, path=['country'], values='count',
-#                                 title='Top 10 Countries by Number of Movies Produced',
-#                                 color='count',
-#                                 color_continuous_scale=px.colors.sequential.Plasma)
+        movies_release_year_counts = movies['release_year'].value_counts().sort_index()
+        tv_shows_release_year_counts = tv_shows['release_year'].value_counts().sort_index()
 
-#         st.plotly_chart(fig_treemap)
-#         # Plot 6: Distribution of Top Genres in Top Countries
-#         country_genre_counts = movies.groupby(['country', 'listed_in']).size().unstack(fill_value=0)
+        # Create a Plotly figure
+        fig4 = go.Figure()
 
-#         # Select the top 10 countries based on total movie counts
-#         top_countries = country_genre_counts.sum(axis=1).sort_values(ascending=False).head(10).index
+        color_scale = px.colors.sequential.Viridis
+         # Treemap for Movies
+        top_10_countries = movies['country'].value_counts().nlargest(10).reset_index()
+        top_10_countries.columns = ['country', 'count'] 
+        fig_treemap = px.treemap(top_10_countries, path=['country'], values='count',
+                                title='Top 10 Countries by Number of Movies Produced (2015-2021)',
+                                color='count',
+                                color_continuous_scale=color_scale)
 
-#         # Filter the genre counts to include only the top countries
-#         top_country_genre = country_genre_counts.loc[top_countries]
+        st.plotly_chart(fig_treemap)
 
-#         # Select the top genres
-#         top_genres = top_country_genre.sum().sort_values(ascending=False).head(10).index
+         # Treemap for TV Shows 
+        top_10_countries = tv_shows['country'].value_counts().nlargest(10).reset_index()
+        top_10_countries.columns = ['country', 'count'] 
+        fig_treemap = px.treemap(top_10_countries, path=['country'], values='count',
+                                title='Top 10 Countries by Number of TV Shows Produced (2015-2021)',
+                                color='count',
+                                color_continuous_scale=px.colors.sequential.Plasma[::-1])
 
-#         # Filter the genre counts to include only the top genres
-#         top_country_genre = top_country_genre[top_genres]
+        st.plotly_chart(fig_treemap)
 
-#         # Create a stacked bar chart using Plotly
-#         fig6 = go.Figure()
+        # Plot : Distribution of ratings
+        rating_count = df['rating'].value_counts().reset_index()
+        rating_count.columns = ['rating', 'count']
+        fig2 = px.pie(rating_count, values='count', names='rating', title="Distribution of Netflix Ratings")
+        st.plotly_chart(fig2)
 
-#         # Loop through each genre to add a trace to the figure
-#         for genre in top_country_genre.columns:
-#             fig6.add_trace(go.Bar(
-#                 x=top_country_genre.index,
-#                 y=top_country_genre[genre],
-#                 name=genre,
-#                 hoverinfo='y+name',
-#             ))
+        # Plot: Distribution of Top Genres : Movies
+        country_genre_counts = movies.groupby(['country', 'listed_in']).size().unstack(fill_value=0)
+        top_countries = country_genre_counts.sum(axis=1).sort_values(ascending=False).head(10).index
+        top_country_genre = country_genre_counts.loc[top_countries]
+        top_genres = top_country_genre.sum().sort_values(ascending=False).head(10).index
 
-#         # Update layout for the stacked bar chart
-#         fig6.update_layout(
-#             title='Distribution of Top Genres in Top Countries',
-#             xaxis_title='Country',
-#             yaxis_title='Number of Movies',
-#             barmode='stack',  # Set barmode to stack
-#             legend_title='Genre',
-#             template='plotly'
-#         )
+        top_country_genre = top_country_genre[top_genres]
+        fig6 = go.Figure()
+
+        # Loop through each genre to add a trace to the figure
+        for genre in top_country_genre.columns:
+            fig6.add_trace(go.Bar(
+                x=top_country_genre.index,
+                y=top_country_genre[genre],
+                name=genre,
+                hoverinfo='y+name',
+            ))
+
+        # Update layout for the stacked bar chart
+        fig6.update_layout(
+            title='Distribution of Top Genres on Movies in Top 10 Countries',
+            xaxis_title='Country',
+            yaxis_title='Number of Movies',
+            barmode='stack',
+            legend_title='Genre',
+            template='plotly'
+        )
+
+        # Display the plot in Streamlit
+        st.plotly_chart(fig6)
+
+        # Plot: Distribution of Top Genres : TV Shows 
+        country_genre_counts = tv_shows.groupby(['country', 'listed_in']).size().unstack(fill_value=0)
+        top_countries = country_genre_counts.sum(axis=1).sort_values(ascending=False).head(10).index
+        top_country_genre = country_genre_counts.loc[top_countries]
+        top_genres = top_country_genre.sum().sort_values(ascending=False).head(10).index
+
+        top_country_genre = top_country_genre[top_genres]
+        fig6 = go.Figure()
+
+        # Loop through each genre to add a trace to the figure
+        for genre in top_country_genre.columns:
+            fig6.add_trace(go.Bar(
+                x=top_country_genre.index,
+                y=top_country_genre[genre],
+                name=genre,
+                hoverinfo='y+name',
+            ))
+
+        # Update layout for the stacked bar chart
+        fig6.update_layout(
+            title='Distribution of Top Genres on TV Shows in Top 10 Countries',
+            xaxis_title='Country',
+            yaxis_title='Number of Movies',
+            barmode='stack',  # Set barmode to stack
+            legend_title='Genre',
+            template='plotly'
+        )
 
 #         # Display the plot in Streamlit
 #         st.plotly_chart(fig6)
