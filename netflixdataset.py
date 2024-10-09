@@ -316,9 +316,24 @@ with DashboadTab:
 #         st.write("""
 #         """)
 
-# # Analysis Tab
-# with AnalysisTab:
-#     st.write("### Analysis")
-#     st.write("Further analysis can be added here.")
+# Analysis Tab
+with AnalysisTab:
+    st.write("### Analysis")
+    st.write("""
+    The analysis of the Netflix dataset reveals significant trends in content production, 
+    highlighting a steady increase in movie and TV show releases after 2000, peaking around 2018-2019 
+    before a noticeable decline in 2020, likely influenced by external factors such as the pandemic. 
+
+    The data shows that the United States and India are the dominant contributors to Netflix's content library, 
+    with a substantial majority of productions originating from these countries, particularly in genres like 
+    crime and documentaries. 
+
+    Visualizations such as line plots, bar charts, and heatmaps effectively illustrate this growth and genre diversity, 
+    underscoring Netflix's strategic focus on expanding its offerings to engage a global audience. 
+
+    As the platform continues to navigate the competitive streaming landscape, understanding these trends will be 
+    crucial for future content development and audience targeting.
+    """)
+
 
 
