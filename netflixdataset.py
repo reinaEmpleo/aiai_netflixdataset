@@ -176,7 +176,7 @@ with OverviewTab:
     st.write("### First 5 Rows of the Dataset")
     st.write(df_cleaned.head())
     
-   with DashboadTab:
+    with DashboadTab:
         st.markdown("<h3><span style='color:red'>Netflix</span> Data Visualization of 2005 - 2021</h3>", unsafe_allow_html=True)
         type_count = df.groupby(['release_year', 'type']).size().reset_index(name='count')
 
