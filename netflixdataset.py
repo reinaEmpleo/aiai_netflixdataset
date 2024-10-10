@@ -312,7 +312,7 @@ with OverviewTab:
 
         # Display the plot in Streamlit
         st.plotly_chart(fig6)
-        st.markdown("<i><small>📊 **Figure**: This stacked bar chart highlights the **Top Genres** in the **Top 10 Countries** for Netflix movies. </small></i>", unsafe_allow_html=True)
+        st.markdown("<i><small>📊 **Figure 5**: This stacked bar chart highlights the **Top Genres** in the **Top 10 Countries** for Netflix movies. </small></i>", unsafe_allow_html=True)
         st.markdown("<small>The US dominates with **Documentaries** (265) and **Stand-Up Comedy** (196), showcasing a strong focus on factual and comedic content. **India** leans toward a mix of **Comedies, Dramas, and International Movies**, reflecting its diverse storytelling preferences. The **UK** favors **Documentaries**, while **Canada** balances **family-friendly comedies** and **Documentaries**. **France** highlights a preference for **Dramas** and **International Movies**, indicating a taste for emotionally rich and globally diverse content. Each country's top genres reflect its unique cultural and entertainment priorities.</small>", unsafe_allow_html=True)
 
         # Plot: Distribution of Top Genres : TV Shows 
@@ -345,7 +345,7 @@ with OverviewTab:
 
             # Display the plot in Streamlit
         st.plotly_chart(fig7)
-        st.markdown("<i><small>📊 **Figure**: This stacked bar chart presents the **Top Genres** in selected countries for Netflix shows.</small></i>", unsafe_allow_html=True)
+        st.markdown("<i><small>📊 **Figure 6**: This stacked bar chart presents the **Top Genres** in selected countries for Netflix TV shows.</small></i>", unsafe_allow_html=True)
         st.markdown("<small>The **US** leads with a significant preference for **Kid's TV** (93), showing a strong demand for child-friendly content, followed by **Reality TV** (72), and both **Docuseries** and **TV Comedies** (60 each). **South Korea** emphasizes a mix of **International, Korean, and Romantic TV Shows** (63), reflecting its global influence and local storytelling. **Japan** stands out with a strong affinity for **Anime** and **International TV Shows** (71), indicating the popularity of animated content and cross-border entertainment.</small>", unsafe_allow_html=True)
 
     with AnalysisTab:
