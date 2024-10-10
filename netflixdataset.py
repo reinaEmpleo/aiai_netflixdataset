@@ -357,7 +357,6 @@ with OverviewTab:
         st.markdown("<i><small>📊 **Figure 6**: This pie chart provides an overview of the **Distribution** of **Ratings** of both **TV-show and Movie** between **2005 and 2021**.</small></i>", unsafe_allow_html=True)
         st.markdown("<small>The pie chart on Netflix ratings distribution reveals that TV-MA (Mature Audiences) dominates with 39.4% of all rated content, indicating that a significant portion of Netflix's content is tailored to adult viewers. TV-14, targeting teenagers, follows with 24.3%, reflecting a large amount of content for younger audiences as well. TV-PG, at 9.7%, and R-rated content, at 8.62%, further contribute to the platform's adult-focused offerings. The presence of TV-Y (3.09%) and TV-Y7 (3.06%) shows Netflix's smaller but notable commitment to children’s programming. The lower percentages for PG (2.9%) and TV-G (2.48%) suggest that family-oriented content forms a smaller portion of the overall library. This data highlights Netflix’s emphasis on mature and teen audiences while maintaining a diverse range of content for different age groups.</small>", unsafe_allow_html=True)
 
-        st.divider()
     with AnalysisTab:
         st.write("### Analysis",":clipboard:")
         st.markdown(
